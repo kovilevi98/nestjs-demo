@@ -56,6 +56,6 @@ export class UserController {
     @ApiUnauthorizedResponse()
     async whoAmI(@Req() req, @Res() res : Response) {
         return res.status(HttpStatus.OK).json(new TokenDto(req.user.username, req.access_token));
-      }
+    }
 
 }
