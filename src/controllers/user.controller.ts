@@ -23,7 +23,7 @@ export class UserController {
             })
         }
 
-      //const user = await this.userService.register(userDto);
+      const user = await this.userService.register(userDto);
       return res.status(HttpStatus.OK).json(userDto);
     }  
 
@@ -46,7 +46,7 @@ export class UserController {
             })
         }
         //const dbUser = await this.userService.findOne(user.username);
-        return res.status(HttpStatus.OK).json(new TokenDto(userDto.username, response.access_token));
+        return res.status(HttpStatus.OK).json(new TokenDto(userDto.username, response.access_token, response.id));
     }
 
     @Get('/who-am-i')
@@ -55,7 +55,7 @@ export class UserController {
     @ApiOkResponse({ type: TokenDto })
     @ApiUnauthorizedResponse()
     async whoAmI(@Req() req, @Res() res : Response) {
-        return res.status(HttpStatus.OK).json(new TokenDto(req.user.username, req.access_token));
+        return res.status(HttpStatus.OK).json(new TokenDto(req.user.username, req.access_token, req.user.id));
     }
 
 }

@@ -11,6 +11,9 @@ import { Food } from './entities/food.entity';
 import { RestaurantController } from './controllers/restaurant.controller';
 import { RestaurantService } from './services/restaurant.service';
 import { InitialSeeder } from './seeders/initial.seeder';
+import { OrderService } from './services/order.service.';
+import { Order } from './entities/order.entity';
+import { FoodService } from './services/food.servoce';
 
 
 @Module({
@@ -20,7 +23,7 @@ import { InitialSeeder } from './seeders/initial.seeder';
       secret: process.env.SECRET,
       signOptions: { expiresIn: '60s' },
     }),
-    TypeOrmModule.forFeature([User, Restaurant, Food]),
+    TypeOrmModule.forFeature([User, Restaurant, Food, Order]),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
@@ -31,7 +34,7 @@ import { InitialSeeder } from './seeders/initial.seeder';
   ],
   
   controllers: [UserController, RestaurantController],
-  providers: [UserService, RestaurantService, InitialSeeder],
+  providers: [UserService, RestaurantService, InitialSeeder, OrderService, FoodService],
 })
 
 export class AppModule implements OnApplicationBootstrap {

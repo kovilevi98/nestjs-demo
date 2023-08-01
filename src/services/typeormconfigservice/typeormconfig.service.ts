@@ -14,7 +14,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
             password: this.configService.get('MYSQL_PASSWORD'),
             database: this.configService.get('MYSQL_DATABASE'),
             entities: ['dist/entities/**/*.entity{.ts,.js}'],
-            synchronize: false,
+            synchronize: true,
             extra: {
                 trustServerCertificate: true, },
             keepConnectionAlive: true,

@@ -24,6 +24,14 @@ import { JwtService } from '@nestjs/jwt';
         })
     }
 
+    public findOneById(id: string){
+        return this.repository.findOne({
+            where: {
+                id: id
+            }
+        })
+    }
+
     public create(insert: User):Promise<InsertResult > {
         return this.repository.insert(insert);
     }
@@ -61,7 +69,8 @@ import { JwtService } from '@nestjs/jwt';
         
         return { 
             status: 200,
-            access_token: access_token
+            access_token: access_token,
+            id: userData.id
         };
     }
 }

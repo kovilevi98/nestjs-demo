@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Food } from './food.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Order } from './order.entity';
 
 
 @Entity('restaurants')
@@ -22,13 +23,15 @@ export class Restaurant {
     type: Food,
     nullable: true
   })
-  @ManyToMany(
-    () => Food,
-    food => food.restaurant,
-    {onDelete: 'NO ACTION', onUpdate: 'NO ACTION',},
-  )
+
+  @ApiProperty({
+    type: [Order]
+  })
+  @OneToMany(() => Order, (order) => order.restaurant, {nullable: true, eager: true, onDelete: 'CASCADE'})
+  orders?: Order[]
+  
+  @ManyToMany(() => Food)
+  @JoinTable()
   menu?: Food[];
 
-  @Column()
-  orders: string;
 }

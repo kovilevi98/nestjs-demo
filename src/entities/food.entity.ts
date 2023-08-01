@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne, JoinTable, ManyToMany } from 'typeorm';
 import { Restaurant } from './restaurant.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Order } from './order.entity';
 
 
 @Entity('foods')
@@ -21,20 +22,11 @@ export class Food {
   @Column()
   price: number;
 
-  @ManyToMany(
-    () => Restaurant, 
-    restaurant => restaurant.menu, //optional
-    {onDelete: 'NO ACTION', onUpdate: 'NO ACTION'})
-    @JoinTable({
-      name: 'restaurant_food',
-      joinColumn: {
-        name: 'restaurant_id',
-        referencedColumnName: 'id',
-      },
-      inverseJoinColumn: {
-        name: 'food_id',
-        referencedColumnName: 'id',
-      },
-    })
-    restaurant?: Restaurant[];
+  @ManyToMany(() => Restaurant)
+  @JoinTable()
+  restaurant: Restaurant[]
+
+  @ManyToMany(() => Order)
+  @JoinTable()
+  orders: Order[]
 }
