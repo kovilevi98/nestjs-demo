@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: .
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST
+      - MYSQL_PORT
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
+    networks:
+      - internal
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+  db:
+    image: 'mysql:latest'
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+    networks:
+      - internal
+    restart: unless-stopped
+
+networks:
+  internal:
