@@ -1,9 +1,11 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { Response } from 'express';
+import { Body, Controller, HttpStatus, Post, Res, UseGuards, Get, Req } from '@nestjs/common';
+import { ApiOkResponse, ApiResponse, ApiTags, ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Response, Request } from 'express';
 import { ErrorDto } from 'src/dtos/error.dto';
+import { TokenDto } from 'src/dtos/token.dto';
 import { UserDto } from 'src/dtos/user.dto';
 import { UserService } from 'src/services/user.service';
+import { AuthGuard } from 'src/services/utils/auth.gard';
 
 @ApiTags('Users')
 @Controller('auth')
@@ -28,7 +30,7 @@ export class UserController {
     @Post('/login')
     @ApiResponse({ status: 406, description: 'Not acceptable', type: ErrorDto})
     @ApiResponse({ status: 404, description: 'Not found', type: ErrorDto})
-    @ApiOkResponse({ type: UserDto })
+    @ApiOkResponse({ type: TokenDto })
     async login(@Body() userDto : UserDto, @Res() res : Response): Promise <any> {
         const response = await this.userService.login(userDto);
 
@@ -44,23 +46,16 @@ export class UserController {
             })
         }
         //const dbUser = await this.userService.findOne(user.username);
-        return res.status(HttpStatus.OK).json(response.access_token);
+        return res.status(HttpStatus.OK).json(new TokenDto(userDto.username, response.access_token));
     }
 
-    @Post('/who-am-i')
+    @Get('/who-am-i')
+    @UseGuards(AuthGuard)
     @ApiBearerAuth()
-    @ApiResponse({ status: 404, description: 'Not found', type: ErrorDto})
-    @ApiOkResponse({ type: UserDto })
-    async whoAmI(@Res() res : Response): Promise <any> {
-        const response = await this.userService.findOne('test');
-
-        if(!response){
-            return res.status(HttpStatus.NOT_FOUND).json({
-                message: 'User not found'
-            })
-        }
-        //const dbUser = await this.userService.findOne(user.username);
-        return res.status(HttpStatus.OK).json(response);
-    }
+    @ApiOkResponse({ type: TokenDto })
+    @ApiUnauthorizedResponse()
+    async whoAmI(@Req() req, @Res() res : Response) {
+        return res.status(HttpStatus.OK).json(new TokenDto(req.user.username, req.access_token));
+      }
 
 }

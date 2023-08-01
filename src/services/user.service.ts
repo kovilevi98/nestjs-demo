@@ -56,7 +56,7 @@ import { JwtService } from '@nestjs/jwt';
         }
 
         const payload = { sub: userData.id, username: userData.username };
-        const access_token = await this.jwtService.signAsync(payload);
+        const access_token = await this.jwtService.signAsync(payload, { secret: process.env.SECRET });
         
         
         return { 
