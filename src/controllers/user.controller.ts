@@ -1,9 +1,10 @@
 import { Body, Controller, HttpStatus, Post, Res, UseGuards, Get, Req } from '@nestjs/common';
 import { ApiOkResponse, ApiResponse, ApiTags, ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { ErrorDto } from 'src/dtos/error.dto';
 import { TokenDto } from 'src/dtos/token.dto';
 import { UserDto } from 'src/dtos/user.dto';
+import { User } from 'src/entities/user.entity';
 import { UserService } from 'src/services/user.service';
 import { AuthGuard } from 'src/services/utils/auth.gard';
 
@@ -23,7 +24,7 @@ export class UserController {
             })
         }
 
-      const user = await this.userService.register(userDto);
+      await this.userService.register(userDto);
       return res.status(HttpStatus.OK).json(userDto);
     }  
 
@@ -52,10 +53,11 @@ export class UserController {
     @Get('/who-am-i')
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
-    @ApiOkResponse({ type: TokenDto })
+    @ApiOkResponse({ type: User })
     @ApiUnauthorizedResponse()
     async whoAmI(@Req() req, @Res() res : Response) {
-        return res.status(HttpStatus.OK).json(new TokenDto(req.user.username, req.access_token, req.user.id));
+        const user = await this.userService.findOne(req.user.username);
+        return res.status(HttpStatus.OK).json(user);
     }
 
 }

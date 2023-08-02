@@ -14,6 +14,8 @@ import { InitialSeeder } from './seeders/initial.seeder';
 import { OrderService } from './services/order.service.';
 import { Order } from './entities/order.entity';
 import { FoodService } from './services/food.servoce';
+import { OrderController } from './controllers/order.controller';
+import { OrderItem } from './entities/order.item.entity';
 
 
 @Module({
@@ -23,7 +25,7 @@ import { FoodService } from './services/food.servoce';
       secret: process.env.SECRET,
       signOptions: { expiresIn: '60s' },
     }),
-    TypeOrmModule.forFeature([User, Restaurant, Food, Order]),
+    TypeOrmModule.forFeature([User, Restaurant, Food, Order, OrderItem]),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
@@ -33,7 +35,7 @@ import { FoodService } from './services/food.servoce';
     }),
   ],
   
-  controllers: [UserController, RestaurantController],
+  controllers: [UserController, RestaurantController, OrderController],
   providers: [UserService, RestaurantService, InitialSeeder, OrderService, FoodService],
 })
 

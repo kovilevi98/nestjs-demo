@@ -1,8 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, JoinTable, ManyToMany, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, JoinTable, ManyToMany, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Restaurant } from './restaurant.entity';
 import { Food } from './food.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from './user.entity';
+import { OrderItem } from './order.item.entity';
 
 export enum StateType {
   RECEIVED = 'received',
@@ -37,9 +38,10 @@ export class Order {
   user: User;
 
   @ApiProperty({
-    type: [Food]
+    type: [OrderItem]
   })
-  @ManyToMany(() => Food)
-  @JoinTable()
-  items: Food[]
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {nullable: true, eager: true, onDelete: 'CASCADE'})
+  items?: OrderItem[]
+
+
 }

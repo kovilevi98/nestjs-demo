@@ -4,18 +4,33 @@ export class ItemDto{
     @ApiProperty()
     id: string;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: Number,
+        required: true,
+        default: 1,
+        maximum: 99,
+        minimum: 0
+    })
     quantity: number;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+        required: true
+    })
     message: string;
 }
 
 export class CreateOrderDto {
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+        required: true
+    })
     customerId: string;
 
-    @ApiProperty()
+    @ApiProperty({
+        type: String,
+        required: true
+    })
     restaurantId: string;
 
     @ApiProperty({

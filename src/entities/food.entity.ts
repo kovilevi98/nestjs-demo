@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne, JoinTabl
 import { Restaurant } from './restaurant.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Order } from './order.entity';
+import { OrderItem } from './order.item.entity';
 
 
 @Entity('foods')
@@ -28,5 +29,5 @@ export class Food {
 
   @ManyToMany(() => Order)
   @JoinTable()
-  orders: Order[]
+  orderItems: OrderItem[]
 }

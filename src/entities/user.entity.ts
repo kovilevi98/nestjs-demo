@@ -8,6 +8,7 @@ export class User {
     this.username = username;
   }
 
+  @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
