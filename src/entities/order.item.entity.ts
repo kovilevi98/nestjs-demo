@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne, JoinTable, ManyToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Order } from './order.entity';
+import { Food } from './food.entity';
 
 
 @Entity('orderitems')
@@ -24,4 +25,11 @@ export class OrderItem {
   @ApiProperty()
   @Column()
   message: string;
+
+  @ApiProperty({
+    type: [Food]
+  })
+  @ManyToMany(() => Food)
+  @JoinTable()
+  items: Food[]
 }
